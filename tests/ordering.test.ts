@@ -63,15 +63,21 @@ describe('Test prioritization', () => {
     expect(cardsSorted[7]).toEqual(cardStatus8)
   })
 
-  test('Test recentRecentMistakesFirstSorter', () => {
-    const cardsSorted: CardStatus[] = createRecentMistakesFirstSorter().reorganize(cards)
-    expect(cardsSorted[0]).toEqual(cardStatus1)
-    expect(cardsSorted[1]).toEqual(cardStatus2)
-    expect(cardsSorted[2]).toEqual(cardStatus4)
-    expect(cardsSorted[3]).toEqual(cardStatus6)
-    expect(cardsSorted[4]).toEqual(cardStatus3)
-    expect(cardsSorted[5]).toEqual(cardStatus5)
-    expect(cardsSorted[6]).toEqual(cardStatus7)
-    expect(cardsSorted[7]).toEqual(cardStatus8)
-  })
+  test('Test newRecentMistakesFirstSorter', async () => {
+    // Introduce slight delays before recording results to ensure unique timestamps
+    await new Promise(res => setTimeout(res, 10)); cardStatus1.recordResult(false);
+    await new Promise(res => setTimeout(res, 10)); cardStatus1.recordResult(false);
+    await new Promise(res => setTimeout(res, 10)); cardStatus1.recordResult(false);
+  
+    const cardsSorted: CardStatus[] = createRecentMistakesFirstSorter().reorganize(cards);
+    expect(cardsSorted[0].timestamps.map(t => t.getTime())).toEqual(cardStatus1.timestamps.map(t => t.getTime()));
+    expect(cardsSorted[1].timestamps.map(t => t.getTime())).toEqual(cardStatus2.timestamps.map(t => t.getTime()));
+    expect(cardsSorted[2].timestamps.map(t => t.getTime())).toEqual(cardStatus4.timestamps.map(t => t.getTime()));
+    expect(cardsSorted[3].timestamps.map(t => t.getTime())).toEqual(cardStatus6.timestamps.map(t => t.getTime()));
+    expect(cardsSorted[4].timestamps.map(t => t.getTime())).toEqual(cardStatus3.timestamps.map(t => t.getTime()));
+    expect(cardsSorted[5].timestamps.map(t => t.getTime())).toEqual(cardStatus5.timestamps.map(t => t.getTime()));
+    expect(cardsSorted[6].timestamps.map(t => t.getTime())).toEqual(cardStatus7.timestamps.map(t => t.getTime()));
+    expect(cardsSorted[7].timestamps.map(t => t.getTime())).toEqual(cardStatus8.timestamps.map(t => t.getTime()));
+    
+  });
 })
